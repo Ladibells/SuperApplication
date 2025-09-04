@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.ceil
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -78,7 +79,7 @@ class HomeViewModel @Inject constructor(
         getUserLastLocationFromDB()
     }
 
-    fun fetchCurrentLocationWeather(location: String) {
+    private fun fetchCurrentLocationWeather(location: String) {
         AppLogger.d(message = "Inside fetchCurrentLocationWeather")
         viewModelScope.launch {
             AppLogger.d(message = "Inside WeatherHomeViewModel fetchCurrentLocationWeather")
@@ -91,30 +92,28 @@ class HomeViewModel @Inject constructor(
         getCurrentWeatherUseCase(accessKey, query).onEach { result ->
             when (result) {
                 is Resource.Error -> {
-                    _state.value = HomeUIState(
+                    _state.value = _state.value.copy(
                         isLoading = false,
                         error = result.message ?: "An unexpected error occurred"
                     )
                 }
                 is Resource.Loading -> {
-                    _state.value = HomeUIState(isLoading = true)
+                    _state.value = _state.value.copy(isLoading = true)
                 }
                 is Resource.Success -> {
-                    _state.value = HomeUIState(
+                    _state.value = _state.value.copy(
                         weatherHomeUIState = WeatherHomeUIState(
                             locationName = result.data?.locationName,
-                            temperature = result.data?.temperature ?: 0,
-                            unit = result.data?.unit,
+                            temperature = "${ceil(result.data?.temperatureC ?: 0.0).toInt().toString()}°C",
                             weatherIcon = result.data?.weatherIcon,
                             observationTime = result.data?.observationTime,
-                            weatherDescription = result.data?.weatherDescription,
-                            airQuality03 = result.data?.airQuality03,
-                            sunrise = result.data?.sunrise,
-                            sunset = result.data?.sunset,
+                            airQualityO3 = ceil(result.data?.airQuality03 ?: 0.0).toInt().toString(),
                             isLoading = false,
                             error = null
                         )
                     )
+                    AppLogger.d(message = "Inside getCurrentWeatherUseCase Success")
+                    AppLogger.d(message = "Fetched WeatherHomeUIState = ${_state.value}")
                 }
             }
         }.launchIn(viewModelScope)

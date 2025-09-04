@@ -35,7 +35,8 @@ fun HomeScreen(
     wealthBannerClicked: () -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel(),
     festivalBannerClicked: () -> Unit = {},
-    addAddressClicked: () -> Unit = {}
+    addAddressClicked: () -> Unit = {},
+    weatherBannerClicked: () -> Unit = {}
 ) {
 
     val state = viewModel.state.value
@@ -95,13 +96,25 @@ fun HomeScreen(
                     wealthBannerClicked()
                 }
             )
-
+/*
             WeatherBannerComponent(
                 title = stringResource(R.string.weather),
                 description = if (state.weatherHomeUIState?.temperature != null) "${state.weatherHomeUIState.temperature} ${state.weatherHomeUIState.unit}" else null,
                 imageUrl = null,
                 resourceValue = null
             )
+
+ */
+            state.weatherHomeUIState?.also {
+                WeatherBannerComponent(
+                    cityName = it.locationName,
+                    temperature = it.temperature.toString(),
+                    airQualityO3 = it.airQualityO3.toString(),
+                    imageUrl = it.weatherIcon,
+                    resourceValue = null,
+                    bannerClicked = { weatherBannerClicked.invoke() },
+                )
+            }
         }
     }
 }

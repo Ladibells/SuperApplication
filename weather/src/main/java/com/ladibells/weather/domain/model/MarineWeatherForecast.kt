@@ -1,19 +1,11 @@
-package com.ladibells.weather.presentation.screens.weather_home
+package com.ladibells.weather.domain.model
 
-data class WeatherHomeUIState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
+data class MarineWeatherForecast(
     val locationName: String? = null,
-    val temperature: String? = null,
-    val unit: String? = null,
-    val weatherIcon: String? = null,
-    val observationTime: String? = null,
-    val airQualityO3: String? = null,
-
     val forecastDayDate: String? = null,
     val maxTempC: Double? = null,
     val minTempC: Double? = null,
-    val avgHumidity: String? = null,
+    val avgHumidity: Double? = null,
     val summaryOfTheDay  : String? = null,
     val summaryIconOfTheDay : String? = null,
     val sunrise: String? = null,

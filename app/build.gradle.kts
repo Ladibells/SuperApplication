@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.ladibells.superapplication"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.ladibells.superapplication"
@@ -94,6 +94,8 @@ dependencies {
 //    implementation(platform(libs.supabase.bom))
 //    implementation(libs.supabase.postgrest.kt)
 
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
 
 
 //    implementation(libs.kotlinx.coroutines.core)

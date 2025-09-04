@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.ladibells.design.ui.theme.Purple40
+import com.ladibells.design.ui.theme.whiteColor
 
 @Composable
 fun BannerComponent(
@@ -201,8 +203,9 @@ fun FestivalBannerComponent(
 
 @Composable
 fun WeatherBannerComponent(
-    title: String? = null,
-    description: String? = null,
+    cityName: String? = null,
+    temperature: String? = null,
+    airQualityO3: String? = null,
     imageUrl: String? = null,
     resourceValue: Int? = null,
     bannerClicked: () -> Unit = {}
@@ -231,7 +234,9 @@ fun WeatherBannerComponent(
     ){
         imageUrl?.let {
             AsyncImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.wrapContentSize()
+                    .defaultMinSize(minHeight = 80.dp, minWidth = 80.dp)
+                    .align(Alignment.BottomEnd),
                 model = imageUrl,
                 contentDescription = "Banner Image",
                 contentScale = ContentScale.Crop
@@ -251,29 +256,46 @@ fun WeatherBannerComponent(
         Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
+                .matchParentSize()
                 .padding(18.dp),
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.SpaceBetween
 
         ){
-            title?.let {
-                TextComponent(
-                    modifier = Modifier
-                        .wrapContentSize(),
-                    textValue = title,
-                    fontSizeValue = 20.sp,
-                    textColorValue = Color.White,
-                    fontWeightValue = FontWeight.Bold
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+            ) {
+                cityName?.let {
+                    TextComponent(
+                        modifier = Modifier
+                            .wrapContentSize(),
+                        textValue = cityName,
+                        fontSizeValue = 20.sp, //or 24.sp
+                        textColorValue = Color.White,
+                        fontWeightValue = FontWeight.Bold
 
-                )
+                    )
+                }
+
+                airQualityO3?.also {
+                    TextComponent(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(start = 12.dp),
+                        textValue = "Air Quality $it",
+                        fontSizeValue = 16.sp, // 24.sp
+                        textColorValue = whiteColor
+                    )
+                }
             }
 
-            description?.let {
+            temperature?.let {
                 TextComponent(
                     modifier = Modifier
                         .wrapContentSize(),
-                    textValue = description,
+                    textValue = temperature,
                     textColorValue = Color.White,
                 )
             }

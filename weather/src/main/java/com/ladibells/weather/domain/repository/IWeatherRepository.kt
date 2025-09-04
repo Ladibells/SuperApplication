@@ -2,6 +2,7 @@ package com.ladibells.weather.domain.repository
 
 import com.ladibells.utilities.Resource
 import com.ladibells.weather.domain.model.CurrentWeatherResponse
+import com.ladibells.weather.domain.model.MarineWeatherForecast
 import kotlinx.coroutines.flow.Flow
 
 interface IWeatherRepository {
@@ -9,4 +10,10 @@ interface IWeatherRepository {
         accessKey: String,
         query: String
     ) : Flow<Resource<CurrentWeatherResponse>>
+
+    suspend fun getMarineWeatherForecast(
+        accessKey: String,
+        query: String
+    ) : Flow<Resource<MarineWeatherForecast>>
+
 }

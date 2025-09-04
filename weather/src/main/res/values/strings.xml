@@ -52,4 +52,8 @@
     <string name="newcastle_upon_tyne">Newcastle upon Tyne</string>
     <string name="cornwall">Cornwall</string>
     <string name="add_address">Add Address</string>
+    <string name="weather_details">Weather</string>
+    <string name="weather_current_status_image">Weather Current Status Image</string>
+    <string name="air_details">Air Details</string>
+    <string name="avg_humidity">Average Humidity</string>
 </resources>

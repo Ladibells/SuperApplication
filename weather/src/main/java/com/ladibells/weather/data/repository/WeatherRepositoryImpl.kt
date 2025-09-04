@@ -4,7 +4,9 @@ import com.ladibells.utilities.Resource
 import com.ladibells.utilities.logging.AppLogger
 import com.ladibells.weather.data.remote.WeatherApi
 import com.ladibells.weather.data.remote.dto.toCurrentWeatherResponse
+import com.ladibells.weather.data.remote.dto.toMarineWeatherForecast
 import com.ladibells.weather.domain.model.CurrentWeatherResponse
+import com.ladibells.weather.domain.model.MarineWeatherForecast
 import com.ladibells.weather.domain.repository.IWeatherRepository
 import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
@@ -23,9 +25,28 @@ class WeatherRepositoryImpl @Inject constructor(
     ): Flow<Resource<CurrentWeatherResponse>> = flow {
         try {
             emit(Resource.Loading())
-            val currentWeatherResponse = api.getCurrentWeather(accessKey, query).toCurrentWeatherResponse()
-            emit(Resource.Success(currentWeatherResponse))
+            val currentWeatherDto = api.getCurrentWeather(accessKey, query).toCurrentWeatherResponse()
+            emit(Resource.Success(currentWeatherDto))
             AppLogger.d(message = "Inside success of getCurrentWeather")
+        } catch (e: HttpException) {
+            emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
+            AppLogger.d(message = "Inside error of HttpException ${e.localizedMessage}")
+
+        } catch (e: IOException) {
+            AppLogger.d(message = "Inside error of IOException ${e.localizedMessage}")
+            emit(Resource.Error("Couldn't reach server. Check your internet connection."))
+        }
+    }
+
+    override suspend fun getMarineWeatherForecast(
+        accessKey: String,
+        query: String
+    ): Flow<Resource<MarineWeatherForecast>> = flow {
+        try {
+            emit(Resource.Loading())
+            val marineWeatherForecastDto = api.getMarineWeatherForecast(accessKey, query).toMarineWeatherForecast()
+            emit(Resource.Success(marineWeatherForecastDto))
+            AppLogger.d(message = "Inside success of getMarineWeatherForecast")
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
             AppLogger.d(message = "Inside error of HttpException ${e.localizedMessage}")
